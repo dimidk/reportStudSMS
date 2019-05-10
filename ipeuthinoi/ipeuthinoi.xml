@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ipeuthinoi>
+  <name>ΥπεύθυνοιΤμημάτων.xls</name>
+  <row>
+	  <row1>Τμήμα</row1>
+	  <row2>Ονοματεπώνυμο</row2>
+	  <row3>Email</row3>
+	  <row4>Α4</row4>
+	  <row5>Α5</row5>
+	  <row6>ΒΟΙΚ</row6>
+	  <row7>ΒΥΓ</row7>
+	  <row8>ΒΗ</row8>
+	  <row9>ΒΠ</row9>
+	  <row10>ΒΜ1</row10>
+	  <row11>ΒΜ2</row11>
+	  <row12>ΒΓ</row12>
+	  <row13>ΓΟΧ</row13>
+	  <row14>ΓΓΤΡ</row14>
+	  <row15>ΓΥΓ</row15>
+	  <row16>ΓΗ</row16>
+	  <row17>ΓΓΦ</row17>
+	  <row18>ΓΠ</row18>
+	  <row19>ΓΨ</row19>
+  </row>
+</ipeuthinoi>
