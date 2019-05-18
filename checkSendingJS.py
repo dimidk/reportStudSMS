@@ -201,8 +201,17 @@ def sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename):
 	for key,value in smsStudStoixeia_f.items():
 		if class_keys.__contains__(key):
 			
-			timeSent=value[2].split()[0]
-			bodytext_fail=bodytext_fail+value[1] + ','+value[2]+'\n'
+#			get a datetime object
+			datetimeSent=datetime.strptime(value[2],'%Y-%m-%d %H:%M:%S')
+			
+#			convert a datetime object to seconds
+			secsSent=datetimeSent.timestamp()
+			
+#			print('sms timestamp in secs:{} and timestamp:{}'.format(secsSent,datetimeSent))
+			if secsSent<currentSecs and secsSent>currentSecs - 604800:
+			
+#			timeSent=value[2].split()[0]
+				bodytext_fail=bodytext_fail+value[1] + ','+value[2]+'\n'
 #			print('sms failed:{} and in datetime format:{}'.format(bodytext_fail,currentTime))
 	
 	ipeuthinos=filename.split('/')[2].split('.')[0]
