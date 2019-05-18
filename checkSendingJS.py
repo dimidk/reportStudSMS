@@ -37,16 +37,23 @@ class StudentsStoixeia():
 	
 	studStoixeia=dict()
 	
-	def __init__(self,phoneNumber,Surname,Name):
+	def __init__(self,phoneNumber,Surname,Name,tup=''):
 		
 		self.phoneNumber=phoneNumber
 		self.Surname=str(Surname)
 		self.Name=str(Name)
+		self.tup=tup
 		
-		if len(StudentsStoixeia.studStoixeia)==0:
-			StudentsStoixeia.studStoixeia[self.phoneNumber]=[self.Surname+" " +self.Name]
+		key=(self.phoneNumber,self.Surname,self.Name)
 		
-		else: StudentsStoixeia.studStoixeia.update({self.phoneNumber:[self.Surname+" "+self.Name]})
+		if key not in StudentsStoixeia.studStoixeia:
+		
+			StudentsStoixeia.studStoixeia[key]=[self.tup]
+		
+#		else: 
+				#create a tuple with the name of the second child to father's phone number
+#				StudentsStoixeia.studStoixeia[self.phoneNumber].append(self.tup)
+
 	
 	
 #sent a history request and get a json response
@@ -106,7 +113,9 @@ def readStudStoixeia(filename):
 		if len(lineList)>6:
 			
 			phoneNum=lineList[6]
-			s=StudentsStoixeia(phoneNum,surname,name)
+			
+			tup=(surname,name)
+			s=StudentsStoixeia(phoneNum,surname,name,tup)
 		else:
 			print("there is no phone for this student {},{}".format(surname,name))
 
@@ -146,9 +155,11 @@ def createSmsDict(smsStudStoixeia_d,deliveStud):
 	
 	
 	for s in deliveStud:
-		keyAdd=s['to'].lstrip('30')
+		keyAdd=(s['to'].lstrip('30'),s['text'].split()[1],s['text'].split()[2])
+		
 		if keyAdd not in smsStudStoixeia_d:
-			smsStudStoixeia_d.update({keyAdd:[s['text'].split()[1]+' '+s['text'].split()[2],s['text'],s['timestamp']]})
+			tup=(s['text'].split()[1],s['text'].split()[2])
+			smsStudStoixeia_d.update({keyAdd:[tup,s['text'],s['timestamp']]})
 		else:
 			smsStudStoixeia_d[keyAdd].append(s['text']+' '+s['timestamp'])
 	
@@ -156,6 +167,7 @@ def createSmsDict(smsStudStoixeia_d,deliveStud):
 	
 
 #combine info from two dictionaries and send an email to teacher about smss'
+#also check for brothers and sisters
 def sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename):
 	
 	
@@ -171,6 +183,7 @@ def sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename):
 
 		if key in smsStudStoixeia_d:
 			value=smsStudStoixeia_d[key]
+						
 #			get a datetime object
 			datetimeSent=datetime.strptime(value[2],'%Y-%m-%d %H:%M:%S')
 			
@@ -182,8 +195,9 @@ def sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename):
 		
 #				print('timestamp for current time is {} and for time sms sent is {}'.format(datetime.fromtimestamp(currentSecs),datetime.fromtimestamp(secsSent)))
 				bodytext_deliv=bodytext_deliv+value[1]+','+value[2]+'\n'
+				
 	
-	bodytext_fail="Τα παρακάτω μηνύματα απέτυχαν για το τμήμα " + filename+" είναι:\n"
+	bodytext_fail="Τα παρακάτω μηνύματα απέτυχαν για το τμήμα "+filename+" είναι:\n"
 	for key,value in smsStudStoixeia_f.items():
 		if class_keys.__contains__(key):
 			
@@ -192,13 +206,16 @@ def sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename):
 #			print('sms failed:{} and in datetime format:{}'.format(bodytext_fail,currentTime))
 	
 	ipeuthinos=filename.split('/')[2].split('.')[0]
+
 	try:
 		value=IpeuthinoiStoixeia.ipeuthinoistoixeia[ipeuthinos]
 		target=value[1]
 		ipeuthinos_name=value[0]
 		
 		bodytext="Αγαπητέ Συνάδελφε Υπεύθυνος Τμήματος "+ipeuthinos_name+'\n'+bodytext_deliv + bodytext_fail
-		sendEMail(bodytext,target)
+#		sendEMail(bodytext,target)
+		sendEMail(bodytext,"dekadimi@gmail.com")
+		
 	except:
 		print("Cannot find Ipeuthinos Tmimatos for {}".format(filename))
 		errormsg="Δεν βρέθηκε ο Υπεύθυνος Τμήματος για το τμήμα "+filename
