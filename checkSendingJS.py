@@ -144,6 +144,7 @@ def createDictionary():
 		if 'xls' not in filename:
 			continue
 		
+		init.num_update+=1
 		readStudStoixeia(filename)
 		sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename)
 			
@@ -194,7 +195,7 @@ def sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename):
 			if secsSent<currentSecs and secsSent>currentSecs - 604800:
 		
 #				print('timestamp for current time is {} and for time sms sent is {}'.format(datetime.fromtimestamp(currentSecs),datetime.fromtimestamp(secsSent)))
-				bodytext_deliv=bodytext_deliv+value[1]+','+value[2]+'\n'
+				bodytext_deliv=bodytext_deliv+' '+value[1]+','+value[2]+'\n'
 				
 	
 	bodytext_fail="Τα παρακάτω μηνύματα απέτυχαν για το τμήμα "+filename+" είναι:\n"
@@ -210,8 +211,7 @@ def sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename):
 #			print('sms timestamp in secs:{} and timestamp:{}'.format(secsSent,datetimeSent))
 			if secsSent<currentSecs and secsSent>currentSecs - 604800:
 			
-#			timeSent=value[2].split()[0]
-				bodytext_fail=bodytext_fail+value[1] + ','+value[2]+'\n'
+				bodytext_fail=bodytext_fail+' '+value[1] + ','+value[2]+'\n'
 #			print('sms failed:{} and in datetime format:{}'.format(bodytext_fail,currentTime))
 	
 	ipeuthinos=filename.split('/')[2].split('.')[0]
@@ -221,9 +221,11 @@ def sendEMailToClass(smsStudStoixeia_d,smsStudStoixeia_f,filename):
 		target=value[1]
 		ipeuthinos_name=value[0]
 		
+		print("Tmima {}, Ypeuthinos {}, Email {}".format(ipeuthinos,value[0],value[1]))
+		
 		bodytext="Αγαπητέ Συνάδελφε Υπεύθυνος Τμήματος "+ipeuthinos_name+'\n'+bodytext_deliv + bodytext_fail
-#		sendEMail(bodytext,target)
-		sendEMail(bodytext,"dekadimi@gmail.com")
+		sendEMail(bodytext,target)
+	#	sendEMail(bodytext,"dekadimi.epal@gmail.com")
 		
 	except:
 		print("Cannot find Ipeuthinos Tmimatos for {}".format(filename))
@@ -239,7 +241,6 @@ def sendEMail(mailSubject,target):
 	msg['To']=target
 #	msg['To']=', '.join(targets)
 	
-	print ("prepare sending email")
 	server=smtplib.SMTP_SSL(server_host,port)
 	server.login(username,password)
 	server.sendmail(sender,target,msg.as_string())

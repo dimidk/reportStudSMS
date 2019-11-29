@@ -26,7 +26,10 @@ class IpeuthinoiStoixeia():
 		if (self.Tmima) not in IpeuthinoiStoixeia.ipeuthinoistoixeia:
 	
 			IpeuthinoiStoixeia.ipeuthinoistoixeia[self.Tmima]=[self.Surname,self.Email]
-		else:	print("Error!! Cannot put the same class two times!")
+		#	print("Add ipeuthinos to dictionary {},{}".format(Tmima,Surname))
+		else:	
+			print("Error!! Cannot put the same class two times!")
+			print("cannot use values {},{},{}".format(Tmima,Surname,Email))
 
 
 
