@@ -25,7 +25,9 @@ ipeuthinoiDir="./ipeuthinoi"
 tmimataDir="./files"
 xmlFileName=''
 xlsFileName=""
-fp_log=codecs.open(log_file,'a+')
+num_update=0
+
+#fp_log=codecs.open(log_file,'a+')
 
 
 letterTono=['Ά','Έ','Ή','Ί','Ό','Ύ','Ώ','Ϊ','Ϋ']
